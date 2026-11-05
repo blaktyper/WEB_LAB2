@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Страница</title>
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+<header class="header">
+  <h1 class="student_name">Бобков Григорий Дмитриевич</h1>
+  <div class="student_info">
+    <span class="group">P3212</span>
+    <span class="variant">Вариант: 12685</span>
+  </div>
+</header>
+
+<main class="main">
+  <div class="container">
+    <canvas id="canvas" width="700" height="700">
+
+    </canvas>
+
+    <form id="form_id" class="form">
+      <div id="error-box" style="color: red; display: none;"></div>
+      <ul class="buttons_list_X">
+        <li><button type="button" class="btn x-btn" value="-2">-2</button> </li>
+        <li><button type="button" class="btn x-btn" value="-1.5">-1.5</button> </li>
+        <li><button type="button" class="btn x-btn" value="-1">-1</button> </li>
+        <li><button type="button" class="btn x-btn" value="-0.5">-0.5</button> </li>
+        <li><button type="button" class="btn x-btn" value="0">0</button> </li>
+        <li><button type="button" class="btn x-btn" value="0.5">0.5</button> </li>
+        <li><button type="button" class="btn x-btn" value="1">1</button> </li>
+        <li><button type="button" class="btn x-btn" value="1.5">1.5</button> </li>
+        <li><button type="button" class="btn x-btn" value="2">2</button> </li>
+      </ul>
+
+      <div class="field_Y">
+        <input id="y-input" type="text" name="y" min="-5" max="3" placeholder="значение от -5 до 3" required>
+      </div>
+
+      <label for="R">Выбери значение R</label>
+      <div class="R">
+        <select name="R" id="R" >
+          <option value="1">1</option>
+          <option value="1.5">1.5</option>
+          <option value="2">2</option>
+          <option value="2.5">2.5</option>
+          <option value="3">3</option>
+        </select>
+      </div>
+
+      <div class="sunmit_button">
+        <button id="submit_btn" type="submit" class="btn">Проверить</button>
+      </div>
+
+
+
+    </form>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>X</th>
+        <th>Y</th>
+        <th>R</th>
+        <th>Дата и время</th>
+        <th>Результат</th>
+      </tr>
+      </thead>
+
+
+      <tbody id="result_body"></tbody>
+    </table>
+  </div>
+</main>
+
+
+<script src = "script.js"></script>
+<script src = "XYRvalidation.js"></script>
+<script src = "checker.js"></script>
+</body>
+</html>
