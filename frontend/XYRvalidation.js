@@ -45,11 +45,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     }
 
-    if (yInput) {
-        yInput.addEventListener("input", () => {
-            validateY();
-        });
-    }
+
 
     function validateX(){
         hideError();
@@ -67,6 +63,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     }
 
     const buttonList = document.querySelector(".buttons_list_X");
+
     buttonList.addEventListener("click", (event) => {
         if(event.target.classList.contains("x-btn")) {
             const parsedValX= parseFloat(event.target.value);
@@ -126,16 +123,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
             if (isXValid !== false && yValue !== false && rValue !== false) {
 
-                const result= await processPointAsync(selectedX, yValue, rValue);
-
-                savedResults.push(result);
-                localStorage.setItem("results", JSON.stringify(savedResults));
-
                 draw(rValue);
 
-                drawPoint(result.x, result.y, result.r, result.hit);
-                addRowToTable(result);
-                console.log("Результат:",result);
 
             }
         })
@@ -163,42 +152,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
         resultBody.appendChild(tr);
     }
 
-    const savedResults = JSON.parse(localStorage.getItem("results")) || [];
-    for (const resultData of savedResults) {
-        addRowToTable(resultData);
-    }
-
-    if(selectR){
-        if (savedResults.length > 0) {
-            const lastPoint = savedResults[savedResults.length - 1];
-
-            const optionExists = Array.from(selectR.options).some(opt => opt.value === String(lastPoint.r));
-            if (optionExists) {
-                selectR.value = lastPoint.r;
-            }
-        }
-
-        const initialR = parseFloat(selectR.value);
-        draw(initialR);
 
 
-        if (savedResults.length > 0) {
-            const lastPoint = savedResults[savedResults.length - 1];
-            drawPoint(lastPoint.x, lastPoint.y, lastPoint.r, lastPoint.hit);
-        }
 
-
-        selectR.addEventListener("change", () => {
-            const currentR = parseFloat(selectR.value);
-            if (!isNaN(currentR)) {
-                draw(currentR);
-
-                if (savedResults.length > 0) {
-                    const lastPoint = savedResults[savedResults.length - 1];
-                    drawPoint(lastPoint.x, lastPoint.y, lastPoint.r, lastPoint.hit);
-                }
-            }
-        })
-    }
 
 });
