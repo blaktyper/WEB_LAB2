@@ -6,25 +6,29 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
-
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
+    private static final List<Point> results = new ArrayList<>();
+
     public static void main(String[] args) {
         FCGIInterface fcgi = new FCGIInterface();
 
         while (fcgi.FCGIaccept() >= 0) {
             try {
                 processRequest();
+
             } catch (Exception e) {
                 sendResponse(500, "{\"error\":\"Internal server error\"}");
                 e.printStackTrace(System.err);
             }
         }
-
     }
 
-
     private static void processRequest() throws IOException {
+        long startTime = System.nanoTime();
+        long timestamp = System.currentTimeMillis();
 
         String method = System.getProperty("REQUEST_METHOD");
 
@@ -75,14 +79,11 @@ public class Main {
                 return;
             }
 
-            Point point = new Point(x, y, r);
+            double executionTime = (System.nanoTime() - startTime) / 1_000_000.0;
+            Point point = new Point(x, y, r, timestamp, executionTime);
+            results.add(point);
 
-            String json = "{\"x\":" + x +
-                    ",\"y\":" + y +
-                    ",\"r\":" + r +
-                    ",\"hit\":" + point.isHit() + "}";
-
-            sendResponse(200, json);
+            sendResponse(200, buildResultsJson());
 
         } catch (NumberFormatException | NullPointerException e) {
             sendResponse(400, "{\"error\":\"Missing or invalid parameters\"}");
@@ -90,7 +91,6 @@ public class Main {
     }
 
     private static Map<String, String> parseFormData(String body) {
-
         Map<String, String> params = new HashMap<>();
 
         for (String pair : body.split("&")) {
@@ -121,7 +121,6 @@ public class Main {
     }
 
     private static void sendResponse(int status, String body) {
-
         String statusText = switch (status) {
             case 200 -> "200 OK";
             case 400 -> "400 Bad Request";
@@ -138,4 +137,28 @@ public class Main {
         System.out.close();
     }
 
+    private static String buildResultsJson() {
+        StringBuilder json = new StringBuilder("[");
+
+        for (int i = 0; i < results.size(); i++) {
+            Point point = results.get(i);
+
+            if (i > 0) {
+                json.append(",");
+            }
+
+            json.append("{")
+                    .append("\"x\":").append(point.getX()).append(",")
+                    .append("\"y\":").append(point.getY()).append(",")
+                    .append("\"r\":").append(point.getR()).append(",")
+                    .append("\"hit\":").append(point.isHit()).append(",")
+                    .append("\"timestamp\":").append(point.getTimestamp()).append(",")
+                    .append("\"executionTime\":").append(point.getExecutionTime())
+                    .append("}");
+        }
+
+        json.append("]");
+
+        return json.toString();
+    }
 }
