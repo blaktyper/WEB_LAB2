@@ -17,6 +17,7 @@ function draw(rValue) {
     ctx.clearRect(0, 0, width, height);
 
     ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "black";
 
     ctx.beginPath();
     ctx.moveTo(20, centerY);
@@ -43,6 +44,7 @@ function draw(rValue) {
     ctx.stroke();
 
     ctx.beginPath();
+
     const xTicks = [-R_pixels, -half_R_pixels, half_R_pixels, R_pixels];
     xTicks.forEach(offset => {
         ctx.moveTo(centerX + offset, centerY - tickSize);
@@ -72,18 +74,30 @@ function draw(rValue) {
 
     ctx.fillStyle = "rgba(51, 153, 255, 0.8)";
 
-    ctx.fillRect(centerX - R_pixels, centerY, R_pixels, half_R_pixels);
+    ctx.fillRect(
+        centerX,
+        centerY - half_R_pixels,
+        R_pixels,
+        half_R_pixels
+    );
 
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
-    ctx.lineTo(centerX, centerY - R_pixels);
-    ctx.lineTo(centerX + R_pixels, centerY);
+    ctx.arc(
+        centerX,
+        centerY,
+        R_pixels,
+        Math.PI / 2,
+        Math.PI,
+        false
+    );
     ctx.closePath();
     ctx.fill();
 
     ctx.beginPath();
     ctx.moveTo(centerX, centerY);
-    ctx.arc(centerX, centerY, half_R_pixels, Math.PI, 1.5 * Math.PI, false);
+    ctx.lineTo(centerX + half_R_pixels, centerY);
+    ctx.lineTo(centerX, centerY + R_pixels);
     ctx.closePath();
     ctx.fill();
 }
